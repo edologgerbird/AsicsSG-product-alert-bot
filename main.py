@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import asyncio
+import random 
 
 load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -76,12 +77,28 @@ def format_message(query_results):
         output.append((message, result['image_url']))
     return output
 
+def get_channel_chat_id():
+    url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates'
+    response = requests.get(url)
+    data = response.json()
+    if not data['ok']:
+        print("Failed to get updates.")
+        return
+    for result in data['result']:
+        if 'channel_post' in result:
+            chat = result['channel_post']['chat']
+            chat_id = chat['id']
+            chat_title = chat.get('title', 'N/A')
+            print(f"Channel Chat ID: {chat_id}, Channel Name: {chat_title}")
+            return chat_id
+    print("No channel messages found in updates.")
 
 if __name__ == '__main__':
-    products = get_product_list(URL)
-    query_results = format_message(query_availability(products, "novablast"))
-    print(query_results)
-    for message, image_url in query_results:
-        asyncio.run(send_message(message, image_url))
-        time.sleep(0.5)
-    # asyncio.run(send_message("Hello, this is a test message."))
+    while True:
+        products = get_product_list(URL)
+        query_results = format_message(query_availability(products, "superblast"))
+        print(query_results)
+        for message, image_url in query_results:
+            asyncio.run(send_message(message, image_url))
+            time.sleep(0.1)
+        time.sleep(random.randint(3500, 3700))

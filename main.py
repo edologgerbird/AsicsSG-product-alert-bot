@@ -3,16 +3,19 @@ from bs4 import BeautifulSoup
 from telegram import Bot
 import time
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import logging
 import asyncio
-import random 
 
-load_dotenv()
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
-if CHAT_ID is not None:
-    CHAT_ID = int(CHAT_ID)
+# For Github Actions
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
+CHAT_ID = os.environ.get('CHAT_ID')
+
+# load_dotenv()
+# TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+# CHAT_ID = os.getenv('CHAT_ID')
+# if CHAT_ID is not None:
+#     CHAT_ID = int(CHAT_ID)
 
 # Configure logging
 logging.basicConfig(filename='bot.log', level=logging.INFO,
@@ -94,11 +97,9 @@ def get_channel_chat_id():
     print("No channel messages found in updates.")
 
 if __name__ == '__main__':
-    while True:
-        products = get_product_list(URL)
-        query_results = format_message(query_availability(products, "superblast"))
-        print(query_results)
-        for message, image_url in query_results:
-            asyncio.run(send_message(message, image_url))
-            time.sleep(0.1)
-        time.sleep(random.randint(3500, 3700))
+    products = get_product_list(URL)
+    query_results = format_message(query_availability(products, "superblast"))
+    print(query_results)
+    for message, image_url in query_results:
+        asyncio.run(send_message(message, image_url))
+        time.sleep(0.1)

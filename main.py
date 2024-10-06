@@ -98,7 +98,7 @@ def get_channel_chat_id():
 
 if __name__ == '__main__':
     products = get_product_list(URL)
-    query_results = format_message(query_availability(products, "superblast"))
+    query_results = format_message(query_availability(products, "novablast"))
     print(query_results)
     for message, image_url in query_results:
         asyncio.run(send_message(message, image_url))

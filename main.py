@@ -37,13 +37,14 @@ def process_product(product):
     product_details = [
         e
         for e in product.get_text().split("\n")
-        if e not in ["", " ", "\n", "New", "Exclusive", "Sale", "Quickview"]
+        if e not in ["", " ", "\n", "New", "Exclusive", "Sale", "Quickview", "Unisex Running Shoes", "Bestseller"]
         and "colour" not in e.lower()
         and "colours" not in e.lower()
         and "Men's Running Shoes" not in e
     ]
+    # print(product_details)
     product_name = product_details[0]
-    product_price = product_details[1]
+    product_price = product_details[-1]
 
     return {
         "product_name": product_name,
@@ -98,8 +99,9 @@ def get_channel_chat_id():
 
 if __name__ == '__main__':
     products = get_product_list(URL)
-    query_results = format_message(query_availability(products, "superblast"))
+    query_results = query_availability(products, "superblast")
+    formatted_messages = format_message(query_results)
     print(query_results)
-    for message, image_url in query_results:
+    for message, image_url in formatted_messages:
         asyncio.run(send_message(message, image_url))
         time.sleep(0.1)

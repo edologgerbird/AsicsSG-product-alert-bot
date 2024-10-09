@@ -58,7 +58,14 @@ def query_availability(products, product_name):
     for product in products:
         if product_name.lower() in product["product_name"].lower():
             query_results.append(product)
-        
+    
+    # # Check sizes
+    # for result in query_results:
+    #     response = requests.get(result['product_url'])
+    #     soup = BeautifulSoup(response.content, "html.parser")
+    #     in_stock_sizes = soup.find_all("li", {'data-instock': 'true'})
+    #     sizes_in_stock = [item['data-sizevalue'] for item in in_stock_sizes]
+    #     result['sizes_in_stock'] = sizes_in_stock        
     return query_results
 
 async def send_message(message, image_url=None):

@@ -106,7 +106,7 @@ def get_channel_chat_id():
 
 if __name__ == '__main__':
     products = get_product_list(URL)
-    query_results = query_availability(products, "superblast 2")
+    query_results = query_availability(products, "superblast")
     formatted_messages = format_message(query_results)
     print(query_results)
     for message, image_url in formatted_messages:

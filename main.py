@@ -53,11 +53,12 @@ def process_product(product):
         "image_url": image_url,
     }
 
-def query_availability(products, product_name):
+def query_availability(products, product_name_list):
     query_results = []
-    for product in products:
-        if product_name.lower() in product["product_name"].lower():
-            query_results.append(product)
+    for product_name in product_name_list:
+        for product in products:
+            if product_name.lower() in product["product_name"].lower():
+                query_results.append(product)
     
     # # Check sizes
     # for result in query_results:
@@ -106,7 +107,7 @@ def get_channel_chat_id():
 
 if __name__ == '__main__':
     products = get_product_list(URL)
-    query_results = query_availability(products, "superblast")
+    query_results = query_availability(products, ["superblast", "novablast 5"])
     formatted_messages = format_message(query_results)
     print(query_results)
     for message, image_url in formatted_messages:
